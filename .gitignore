@@ -35,3 +35,6 @@ build/
 # Windows
 Thumbs.db
 node_modules
+# Next.js
+.next/
+out/
