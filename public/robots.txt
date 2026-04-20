@@ -1,0 +1,25 @@
+User-agent: *
+
+# Block all API routes — no external indexing of security endpoints
+Disallow: /api/
+
+# Block auth endpoints
+Disallow: /api/auth/
+
+# Block Next.js internals
+Disallow: /_next/
+
+# Disallow all authenticated app routes
+Disallow: /dashboard
+Disallow: /soc
+Disallow: /grc
+Disallow: /av
+Disallow: /pentest
+Disallow: /agents
+Disallow: /audit
+Disallow: /reports
+Disallow: /settings
+Disallow: /executive
+
+# Only the login page is publicly reachable
+Allow: /login

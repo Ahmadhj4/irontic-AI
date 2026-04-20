@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(openssl rand:*)",
+      "mcp__plugin_claude-mem_mcp-search__smart_outline",
+      "mcp__plugin_claude-mem_mcp-search__smart_unfold",
+      "mcp__plugin_claude-mem_mcp-search__get_observations",
+      "Bash(npx tsc:*)",
+      "Bash(node -e \"const z = require\\('zod'\\); console.log\\(z.NEVER\\); const s = z.string\\(\\); console.log\\(typeof s.ip\\);\")",
+      "Bash(node -e \"const {z} = require\\('zod'\\); console.log\\(require\\('./node_modules/zod/package.json'\\).version\\)\")",
+      "Bash(node -e \"const {z} = require\\('zod'\\); const e = z.enum\\(['a','b']\\); console.log\\(e.parse\\('a'\\)\\);\")",
+      "Bash(node -e \"const {z} = require\\('zod'\\); const e = z.enum\\(['grc','soc']\\); console.log\\(e._def?.type ?? JSON.stringify\\(Object.keys\\(e\\)\\)\\);\")",
+      "Bash(node -e \"const {z} = require\\('zod'\\); console.log\\(z.enum.toString\\(\\).slice\\(0,200\\)\\)\")",
+      "Bash(node -e \"const pkg = require\\('./node_modules/zod/package.json'\\); console.log\\(JSON.stringify\\(pkg.exports?.['.'], null, 2\\)\\)\")",
+      "Bash(sed -n '60,75p' \"/Users/ahmadjarrar/Desktop/GreenCircle/Irontic AI/src/app/api/mcp/tools/route.ts\")",
+      "Bash(sed -n '38,50p' \"/Users/ahmadjarrar/Desktop/GreenCircle/Irontic AI/src/app/api/orchestrator/submit/route.ts\")",
+      "Bash(node -e ':*)",
+      "Bash(npm uninstall:*)",
+      "Bash(grep -E \"\\\\.ts$\")",
+      "Read(//Users/ahmadjarrar/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/46f2dfe9-e50c-47d9-bdae-b9bd274b79f6/82f46e78-b9b7-46f5-9636-d6a37f04a130/skills/docx/**)",
+      "Bash(pandoc --track-changes=all \"/Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx\" -o /tmp/irontic-tech.md)",
+      "Bash(python scripts/office/unpack.py \"/Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx\" /tmp/irontic-tech-unpacked/)",
+      "mcp__plugin_claude-mem_mcp-search__smart_search",
+      "Bash(pandoc /Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx -o /tmp/irontic.md)",
+      "Bash(grep -rn \"\\\\b\\\\\\(AV\\\\|Antivirus\\\\|AVDashboard\\\\|av\\\\\\)\\\\b\" --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.js\" --include=\"*.jsx\" --include=\"*.json\" --exclude-dir=node_modules --exclude-dir=.next .)",
+      "Read(//tmp/**)",
+      "Read(//private/tmp/**)",
+      "Bash(python3 \"/Users/ahmadjarrar/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/46f2dfe9-e50c-47d9-bdae-b9bd274b79f6/82f46e78-b9b7-46f5-9636-d6a37f04a130/skills/docx/scripts/office/unpack.py\" \"/Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx\" /tmp/irontic_unpacked/)",
+      "Bash(pip3 install *)",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 '/Users/ahmadjarrar/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/46f2dfe9-e50c-47d9-bdae-b9bd274b79f6/82f46e78-b9b7-46f5-9636-d6a37f04a130/skills/docx/scripts/office/unpack.py' /Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx /tmp/irontic_unpacked/)",
+      "Bash(pandoc /Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx -o /tmp/irontic_full.md)",
+      "Bash(python scripts/office/unpack.py \"/Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx\" /tmp/irontic_unpacked/)",
+      "Bash(python3 scripts/office/unpack.py \"/Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx\" /tmp/irontic_unpacked/)",
+      "Bash(node -e \"const ts = require\\('typescript'\\); console.log\\(ts.version\\)\")",
+      "Bash(pandoc --track-changes=all \"/Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx\" -o /tmp/irontic_tech.md)"
+    ]
+  }
+}
