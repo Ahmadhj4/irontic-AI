@@ -92,7 +92,7 @@ export interface IAgent {
 
 // ─── Orchestrator Types ─────────────────────────
 export interface OrchestratorEvent {
-  type: 'task_queued' | 'task_started' | 'task_completed' | 'task_failed' | 'agent_status_changed' | 'finding_detected' | 'conflict_detected' | 'conflict_resolved';
+  type: 'task_queued' | 'task_started' | 'task_completed' | 'task_failed' | 'agent_status_changed' | 'finding_detected' | 'conflict_detected' | 'conflict_resolved' | 'agent_soft_restarted' | 'agent_hard_restarted' | 'agent_p1_incident';
   agentId?: string;
   taskId?: string;
   domain?: AgentDomain;

@@ -15,10 +15,25 @@ import {
 import { IAgent } from '@/types/agent.types';
 import { TaskQueue } from './TaskQueue';
 import { ConflictResolver } from './ConflictResolver';
-import { grcAgent } from '@/agents/GRCAgent';
-import { socAgent } from '@/agents/SOCAgent';
-import { avAgent } from '@/agents/AVAgent';
-import { pentestAgent } from '@/agents/PentestAgent';
+import { GRCAgent, grcAgent } from '@/agents/GRCAgent';
+import { SOCAgent, socAgent } from '@/agents/SOCAgent';
+import { AVAgent, avAgent } from '@/agents/AVAgent';
+import { PentestAgent, pentestAgent } from '@/agents/PentestAgent';
+
+// Self-healing thresholds (Tech Doc §19.1)
+const SOFT_RESTART_THRESHOLD = 1; // failures before soft restart
+const HARD_RESTART_THRESHOLD = 2; // failures before hard restart (terminate + recreate)
+const P1_THRESHOLD           = 3; // failures before P1 incident escalation
+
+// Factory creates a fresh agent instance for hard restart
+function createAgent(domain: AgentDomain): IAgent {
+  switch (domain) {
+    case 'grc':     return new GRCAgent()     as IAgent;
+    case 'soc':     return new SOCAgent()     as IAgent;
+    case 'av':      return new AVAgent()      as IAgent;
+    case 'pentest': return new PentestAgent() as IAgent;
+  }
+}
 
 export class AgentRouter extends EventEmitter {
   private agents: Map<AgentDomain, IAgent>;
@@ -26,6 +41,8 @@ export class AgentRouter extends EventEmitter {
   private resolver: ConflictResolver;
   private activeTasks: Map<string, AgentTask> = new Map();
   private isProcessing = false;
+  // Track consecutive failures per domain for §19.1 self-healing
+  private failureCounts: Map<AgentDomain, number> = new Map();
 
   constructor() {
     super();
@@ -193,10 +210,62 @@ export class AgentRouter extends EventEmitter {
           payload: err,
           timestamp: new Date(),
         } as OrchestratorEvent);
+
+        // §19.1 — self-healing state machine
+        void this.healAgent(task.domain);
       }
     }
 
     this.isProcessing = false;
+  }
+
+  // ── Self-healing (Tech Doc §19.1) ────────────────────────────
+  // Three-stage recovery: soft restart → hard restart → P1 incident
+  private async healAgent(domain: AgentDomain): Promise<void> {
+    const failures = (this.failureCounts.get(domain) ?? 0) + 1;
+    this.failureCounts.set(domain, failures);
+    const agent = this.agents.get(domain);
+    if (!agent) return;
+
+    if (failures >= P1_THRESHOLD) {
+      // Stage 3: escalate — emit P1 incident event, reset counter
+      this.failureCounts.set(domain, 0);
+      this.emit('event', {
+        type: 'agent_p1_incident',
+        domain,
+        agentId: agent.agentId,
+        payload: { failures, message: `${domain} agent exceeded max recovery attempts — P1 incident raised` },
+        timestamp: new Date(),
+      } as OrchestratorEvent);
+      return;
+    }
+
+    if (failures >= HARD_RESTART_THRESHOLD) {
+      // Stage 2: hard restart — terminate + create a fresh instance
+      agent.terminate();
+      const fresh = createAgent(domain);
+      this.agents.set(domain, fresh);
+      this.emit('event', {
+        type: 'agent_hard_restarted',
+        domain,
+        agentId: fresh.agentId,
+        payload: { failures, previousAgentId: agent.agentId },
+        timestamp: new Date(),
+      } as OrchestratorEvent);
+      return;
+    }
+
+    if (failures >= SOFT_RESTART_THRESHOLD) {
+      // Stage 1: soft restart — resume ERROR → IDLE
+      agent.resume();
+      this.emit('event', {
+        type: 'agent_soft_restarted',
+        domain,
+        agentId: agent.agentId,
+        payload: { failures },
+        timestamp: new Date(),
+      } as OrchestratorEvent);
+    }
   }
 
   private async dispatchDirect(

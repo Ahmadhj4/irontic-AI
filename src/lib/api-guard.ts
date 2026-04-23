@@ -94,3 +94,51 @@ export async function requireAuthWithRateLimit(
 export async function requireAuthRead(req: Request): Promise<GuardResult> {
   return requireAuthWithRateLimit(req, READ_LIMITER);
 }
+
+// ── RFC 7807 Problem Details ──────────────────────────────────────────────
+// Tech Doc §22.1 — all error responses use this format
+
+export interface ProblemDetail {
+  type: string;
+  title: string;
+  status: number;
+  detail: string;
+  instance?: string;
+}
+
+/**
+ * Returns a NextResponse with RFC 7807 Problem Details body.
+ * Use instead of bare NextResponse.json({ error }) for all API error paths.
+ */
+export function apiError(
+  status: number,
+  title: string,
+  detail: string,
+  instance?: string,
+): NextResponse {
+  const body: ProblemDetail = {
+    type: `https://irontic.ai/errors/${title.toLowerCase().replace(/\s+/g, '-')}`,
+    title,
+    status,
+    detail,
+    ...(instance ? { instance } : {}),
+  };
+  return NextResponse.json(body, {
+    status,
+    headers: { 'Content-Type': 'application/problem+json' },
+  });
+}
+
+// ── Tenant isolation ──────────────────────────────────────────────────────
+// Tech Doc §4.1 — X-Tenant-ID propagated in every API call header
+
+/**
+ * Extract the tenant ID from request headers.
+ * In production this is validated against the JWT claim at the Kong gateway.
+ * In the portal layer we read the header and fall back to a default.
+ */
+export function extractTenantId(req: Request): string {
+  const header = (req as unknown as { headers: { get(k: string): string | null } })
+    .headers.get('x-tenant-id');
+  return header ?? 'default';
+}
