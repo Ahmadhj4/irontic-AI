@@ -37,7 +37,8 @@
       "Bash(pandoc --track-changes=all \"/Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx\" -o /tmp/irontic_tech.md)",
       "Bash(gh pr create --title 'Implement L5 API Gateway + L4 Orchestration layers' --body ' *)",
       "Bash(brew list *)",
-      "Read(//usr/local/bin/**)"
+      "Read(//usr/local/bin/**)",
+      "Bash(npm run *)"
     ]
   }
 }
