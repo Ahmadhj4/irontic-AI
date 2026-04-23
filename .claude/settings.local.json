@@ -34,7 +34,10 @@
       "Bash(python scripts/office/unpack.py \"/Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx\" /tmp/irontic_unpacked/)",
       "Bash(python3 scripts/office/unpack.py \"/Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx\" /tmp/irontic_unpacked/)",
       "Bash(node -e \"const ts = require\\('typescript'\\); console.log\\(ts.version\\)\")",
-      "Bash(pandoc --track-changes=all \"/Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx\" -o /tmp/irontic_tech.md)"
+      "Bash(pandoc --track-changes=all \"/Users/ahmadjarrar/Desktop/GreenCircle/irontic-tech.docx\" -o /tmp/irontic_tech.md)",
+      "Bash(gh pr create --title 'Implement L5 API Gateway + L4 Orchestration layers' --body ' *)",
+      "Bash(brew list *)",
+      "Read(//usr/local/bin/**)"
     ]
   }
 }
